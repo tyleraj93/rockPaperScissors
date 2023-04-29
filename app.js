@@ -15,31 +15,23 @@ function playRound(playerSelection, computerSelection) {
     switch (true) {
         case playerSelection === computerSelection:
             return "You draw";
-            break;
         case playerSelection === "rock" && computerSelection === "paper":
             return "You lose...";
-            break;
         case playerSelection === "rock" && computerSelection === "scissors":
             return "You win!";
-            break;
         case playerSelection === "paper" && computerSelection === "scissors":
             return "You lose...";
-            break;
         case playerSelection === "paper" && computerSelection === "rock":
             return "You win!";
-            break;
         case playerSelection === "scissors" && computerSelection === "rock":
             return "You lose...";
-            break;
         case playerSelection === "scissors" && computerSelection === "paper":
             return "You win!";
-            break;
         default:
             // If the player inputs an incorrect option they will be prompted to select again
             playerSelection = prompt("Pick: rock, paper, or scissors.").toLowerCase();
             // After the player selects a new option the round will be ran again
             return playRound(playerSelection, computerSelection);
-            break;
     }
 }
 

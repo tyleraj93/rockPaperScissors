@@ -1,7 +1,24 @@
 /*
 "The Odin Project" Rock Paper Scissors Game
-First iteration of the project using just the console to play
 */
+
+const div = document.createElement("div")
+document.body.appendChild(div);
+const button_rock = document.createElement("button");
+button_rock.textContent = "rock";
+div.appendChild(button_rock);
+const button_paper = document.createElement("button");
+button_paper.textContent = "paper"
+div.appendChild(button_paper);
+const button_scissors = document.createElement("button");
+button_scissors.textContent = "scissors";
+div.appendChild(button_scissors);
+
+const buttons = document.querySelectorAll("button");
+
+
+const results = document.createElement("div");
+document.body.appendChild(results);
 
 // Generates a random choice for the computer
 function getComputerChoice() {
@@ -29,40 +46,43 @@ function playRound(playerSelection, computerSelection) {
             return "You win!";
         default:
             // If the player inputs an incorrect option they will be prompted to select again
-            playerSelection = prompt("Pick: rock, paper, or scissors.").toLowerCase();
+            playerSelection = prompt(
+                "Pick: rock, paper, or scissors."
+            ).toLowerCase();
             // After the player selects a new option the round will be ran again
             return playRound(playerSelection, computerSelection);
     }
 }
 
-// Plays a 5 round game and will tell you if you won the round and overall
 function game() {
     let playerWins = 0;
     let computerWins = 0;
-    // Loop for 5 rounds logging who won the round
-    for (let rounds = 5; rounds > 0; rounds--) {
-        // I wanted to print what round was being played each time the verdict was printed
-        let round = "Round: " + (6-rounds) + " ";
-        let playerChoice = prompt("Pick: rock, paper, or scissors.").toLowerCase();
-        let computerChoice = getComputerChoice();
-        // I had the verdict determined by itself so that if a user tried the wrong input it would run right
-        let verdict = playRound(playerChoice, computerChoice);
-        if (verdict === "You win!") {
-            console.log(round + verdict);
+
+    // Created a function to deal with the limit on wins
+    const handleClick = (event) => {
+        const result = document.createElement("p");
+        result.textContent = playRound(
+            event.target.textContent,
+            getComputerChoice()
+        );
+        results.appendChild(result);
+        if (result.textContent === "You win!") {
             playerWins++;
-        } else if (verdict === "You lose...") {
-            console.log(round + verdict);
+        } else if (result.textContent === "You lose...") {
             computerWins++;
-        } else if (verdict === "You draw") {
-            console.log(round + verdict);
         }
-    }
-    // Determines who won overall
-    if (playerWins > computerWins) {
-        console.log("You're the winner!");
-    } else if (computerWins > playerWins) {
-        console.log("Better luck next time.");
-    } else {
-        console.log("Tie game.");
-    }
+        if (playerWins === 5 || computerWins === 5) {
+            buttons.forEach((button) => {
+                button.removeEventListener("click", handleClick);
+            });
+            const winner = document.createElement("p");
+            playerWins > computerWins ? winner.textContent = "You're the winner!" : winner.textContent = "Try harder next time.";
+            results.appendChild(winner);
+        }
+    };
+    buttons.forEach((button) => {
+        button.addEventListener("click", handleClick);
+    });
 }
+
+game()
